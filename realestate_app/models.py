@@ -3,7 +3,6 @@ from django.db import models
 # Create your models here.
 
 class Contract(models.Model):
-    contract_num = models.BigIntegerField()
     seller = models.CharField(max_length=30, help_text="Enter Seller's Name")
     buyer = models.CharField(max_length=30, help_text="Enter Buyer's Name")
     listingAgent = models.CharField(max_length=30, help_text="Enter Listing Agent")
@@ -19,20 +18,22 @@ class Contract(models.Model):
     comments = models.TextField(help_text = "Enter pertinent information")
 
     def __str__(self):
-        """String for representing the MyModelName object (in Admin site etc.)."""
-        return self.my_field_name
-class Transaction(models.Model):
-    contract_num = models.BigIntegerField()
-    closeDate = models.DateField(auto_now_add=True)
-    propertyAddress = models.CharField(max_length=30)
-    closingDocumentsPDF = models.FileField(upload_to='')
-    comments = models.TextField()
+        """Return a string representation of the model."""
+        return self.propertyAddress
+
+class Closing(models.Model):
+    finalClosing = models.ForeignKey(Contract, on_delete=models.CASCADE)
+    closeDate = models.DateField(auto_now_add=True, help_text = "Enter Close Date")
+    propertyAddress = models.CharField(max_length=30, help_text = "Enter Property Address")
+    closingDocumentsPDF = models.FileField(upload_to='', help_text = "Attach closing documents")
+    comments = models.TextField(help_text = "Enter Pertinent Documents")
 
     def __str__(self):
-        """String for representing the MyModelName object (in Admin site etc.)."""
-        return self.my_field_name
+        """Return a string representation of the model."""
+        return self.closeDate
 
 class Person(models.Model):
+    keyPerson = models.ForeignKey(Contract, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)  
     title = models.CharField(max_length=30)
@@ -41,15 +42,16 @@ class Person(models.Model):
     phone = models.CharField(max_length=30)
     street = models.CharField(max_length=30)
     city = models.CharField(max_length=30)
+    state = models.CharField(max_length=30)
     zip = models.CharField(max_length=10)
     role = models.CharField(max_length=10)
 
     def __str__(self):
-        """String for representing the MyModelName object (in Admin site etc.)."""
-        return self.my_field_name
+        """Return a string representation of the model."""
+        return self.first_name
 
 class ContractActions(models.Model):
-    contract_num = models.BigIntegerField()
+    contractAction = models.ForeignKey(Contract, on_delete=models.CASCADE)
     action = models.CharField(max_length=30)
     actionPerson = models.CharField(max_length=30)
     actionCompany = models.CharField(max_length=30)
@@ -59,8 +61,8 @@ class ContractActions(models.Model):
 
 
     def __str__(self):
-            """String for representing the MyModelName object (in Admin site etc.)."""
-            return self.my_field_name
+        """Return a string representation of the model."""
+        return self.action
 
 """
     inspector = models.CharField(max_length=30)
