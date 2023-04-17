@@ -9,7 +9,7 @@ class Contract(models.Model):
     buyingAgent = models.CharField(max_length=30, help_text="Enter Buying Agent")
     price = models.PositiveBigIntegerField(help_text="Enter Price")
     propertyAddress = models.CharField(max_length=30, help_text="Enter Property Addresss")
-    contractPDF = models.FileField(upload_to='', help_text="Attach Contract")
+    contractPDF = models.FileField(upload_to='', help_text="Attach Contract",blank=True, null=True)
     contractDate = models.DateField(auto_now_add=True, help_text="Enter Date of Contract")
     mortgage_or_cash = models.CharField(max_length=30, help_text="Enter Mortgage or Cash")
     mortgageAmount = models.PositiveBigIntegerField( help_text= "Enter Mortgage Amount")
@@ -17,15 +17,18 @@ class Contract(models.Model):
     closedYesNo = models.CharField(max_length=30, help_text= "Has the contract closed? Enter 'Yes' or No' " )
     comments = models.TextField(help_text = "Enter pertinent information")
 
+    class Meta:
+        ordering = ["propertyAddress"]
+
     def __str__(self):
         """Return a string representation of the model."""
         return self.propertyAddress
 
 class Closing(models.Model):
-    finalClosing = models.ForeignKey(Contract, on_delete=models.CASCADE)
+    finalClosing = models.ForeignKey(Contract, on_delete=models.CASCADE, null=True)
     closeDate = models.DateField(auto_now_add=True, help_text = "Enter Close Date")
     propertyAddress = models.CharField(max_length=30, help_text = "Enter Property Address")
-    closingDocumentsPDF = models.FileField(upload_to='', help_text = "Attach closing documents")
+    closingDocumentsPDF = models.FileField(upload_to='', help_text = "Attach closing documents", blank=True, null=True)
     comments = models.TextField(help_text = "Enter Pertinent Documents")
 
     def __str__(self):
@@ -33,7 +36,8 @@ class Closing(models.Model):
         return self.closeDate
 
 class Person(models.Model):
-    keyPerson = models.ForeignKey(Contract, on_delete=models.CASCADE)
+    # keyPerson = models.ForeignKey(Contract, on_delete=models.CASCADE, null=True)
+    contracts = models.ManyToManyField(Contract)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)  
     title = models.CharField(max_length=30)
@@ -42,7 +46,7 @@ class Person(models.Model):
     phone = models.CharField(max_length=30)
     street = models.CharField(max_length=30)
     city = models.CharField(max_length=30)
-    state = models.CharField(max_length=30)
+    state = models.CharField(max_length=30, null=True)
     zip = models.CharField(max_length=10)
     role = models.CharField(max_length=10)
 
@@ -50,12 +54,12 @@ class Person(models.Model):
         """Return a string representation of the model."""
         return self.first_name
 
-class ContractActions(models.Model):
-    contractAction = models.ForeignKey(Contract, on_delete=models.CASCADE)
+class ContractAction(models.Model):
+    contract = models.ForeignKey(Contract, on_delete=models.CASCADE, null=True)
     action = models.CharField(max_length=30)
     actionPerson = models.CharField(max_length=30)
     actionCompany = models.CharField(max_length=30)
-    actionAction = models.CharField(max_length=30)
+    actionNextStep = models.CharField(max_length=30)
     actionFee = models.CharField(max_length=30)
     actionDueDate = models.DateField(auto_now_add=True)
 
