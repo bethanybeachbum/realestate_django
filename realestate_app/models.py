@@ -1,8 +1,15 @@
 from django.db import models
+from datetime import datetime
+from django.utils import timezone
 
 # Create your models here.
 
 class Contract(models.Model):
+    CHOICES = (
+        ('Y', 'Yes'),
+        ('N', 'No'),
+    )
+
     seller = models.CharField(max_length=30, help_text="Enter Seller's Name")
     buyer = models.CharField(max_length=30, help_text="Enter Buyer's Name")
     listingAgent = models.CharField(max_length=30, help_text="Enter Listing Agent")
@@ -10,12 +17,15 @@ class Contract(models.Model):
     price = models.PositiveBigIntegerField(help_text="Enter Price")
     propertyAddress = models.CharField(max_length=30, help_text="Enter Property Addresss")
     contractPDF = models.FileField(upload_to='', help_text="Attach Contract",blank=True, null=True)
-    contractDate = models.DateField(auto_now_add=True, help_text="Enter Date of Contract")
-    mortgage_or_cash = models.CharField(max_length=30, help_text="Enter Mortgage or Cash")
-    mortgageAmount = models.PositiveBigIntegerField( help_text= "Enter Mortgage Amount")
+    contractDate = models.DateTimeField(default=timezone.now, help_text="Enter Date of Contract")
+    # contractDate = models.DateField(auto_now=True, null=True, help_text="Enter Date of Contract")
+    mortgage = models.CharField(max_length=30, default="Y", choices = CHOICES, help_text="Is there a mortgage?")
+    mortgageAmount = models.PositiveBigIntegerField(default=0, help_text= "Enter Mortgage Amount")
     escrowAmount = models.PositiveBigIntegerField(help_text= "Enter Escrow Amount")
-    closedYesNo = models.CharField(max_length=30, help_text= "Has the contract closed? Enter 'Yes' or No' " )
+    closedYesNo = models.CharField(max_length=30, default = "No", choices = CHOICES, help_text= "Has the contract closed?" )
     comments = models.TextField(help_text = "Enter pertinent information")
+    AddDate = models.DateField(auto_now_add=True, null=True, verbose_name="created at")
+    updatedAt = models.DateField(auto_now=True, verbose_name="updated at")
 
     class Meta:
         ordering = ["propertyAddress"]
@@ -26,17 +36,20 @@ class Contract(models.Model):
 
 class Closing(models.Model):
     finalClosing = models.ForeignKey(Contract, on_delete=models.CASCADE, null=True)
-    closeDate = models.DateField(auto_now_add=True, help_text = "Enter Close Date")
-    propertyAddress = models.CharField(max_length=30, help_text = "Enter Property Address")
+    createDate = models.DateField(auto_now_add=True, null=True, verbose_name="created at")
+    closeDate = models.DateField(null = True)
     closingDocumentsPDF = models.FileField(upload_to='', help_text = "Attach closing documents", blank=True, null=True)
     comments = models.TextField(help_text = "Enter Pertinent Documents")
 
+    class Meta:
+        verbose_name = "Final Closing"
+
     def __str__(self):
         """Return a string representation of the model."""
-        return self.closeDate
+        return self.comments
+        
 
 class Person(models.Model):
-    # keyPerson = models.ForeignKey(Contract, on_delete=models.CASCADE, null=True)
     contracts = models.ManyToManyField(Contract)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)  
@@ -61,12 +74,20 @@ class ContractAction(models.Model):
     actionCompany = models.CharField(max_length=30)
     actionNextStep = models.CharField(max_length=30)
     actionFee = models.CharField(max_length=30)
-    actionDueDate = models.DateField(auto_now_add=True)
+    actionDueDate = models.DateField(null=True, default='',)
+    AddDate = models.DateTimeField(auto_now_add=True, null=True, verbose_name="created at")
+    updatedAt = models.DateTimeField(auto_now=True, verbose_name="updated at")
 
+    # start_date = models.DateField(null = True)
+    # end_date = models.DateField(null = True)
 
     def __str__(self):
         """Return a string representation of the model."""
         return self.action
+    
+
+
+
 
 """
     inspector = models.CharField(max_length=30)

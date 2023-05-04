@@ -1,0 +1,29 @@
+{% extends "realestate_app/base.html" %}
+
+<!--   new_contract.html  -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block title %}<title>New Contract Form</title>{% endblock %}
+</head>
+<body>
+    
+  {% block content %}
+  <h2>New Contract Form</h2>
+  <p>Add new contract:</p>
+
+  <form action="{% url 'realestate_app:new_contract' %}" method="'post" >
+    <!-- Prevents cross-site request forgery -->
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button name="Submit">Add Contract</button>
+  </form>
+
+  <a href="{% url 'realestate_app:new_contract' %}"> Add a new contract</a>
+
+  {% endblock content %}
+</body>
+
+</html>
+

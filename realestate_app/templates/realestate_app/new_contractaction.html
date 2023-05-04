@@ -1,0 +1,30 @@
+<!-- new_contractaction.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block title %}<title>New Contract Action Form</title>{% endblock %}
+</head>
+<body>
+    
+  {% block content %}
+  <h2>New Contract Action Form</h2>
+  <p>Add new contract action:</p>
+
+  <p><a href="{% url 'realestate_app:contract' contract_id %}">{{contract}}  </a></p>
+
+  <p>Add a new contract action:</p>
+  <form action="{% url 'realestate_app:new_action' contract_id %}" method='post' >
+    <!-- Prevents cross-site request forgery -->
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button name="Submit">Add Contract Action</button>
+  </form>
+
+  <a href="{% url 'realestate_app:new_action' contract.id %}"> Add a new contract action</a>
+
+  {% endblock content %}
+</body>
+
+</html>
+
