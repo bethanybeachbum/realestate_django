@@ -33,6 +33,8 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     # My apps
     'realestate_app',
+    # Corey Shafer says add:
+    # realestate_app.apps.RealestateAppConfig
 
     # Default django apps
     'django.contrib.admin',

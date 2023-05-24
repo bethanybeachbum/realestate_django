@@ -5,8 +5,11 @@
 {% load static %}
 
 {% block content %}
+<head>
+    {% block title %}<title>Real Deal</title>{% endblock %}
+</head>
 
-
+<h1> Real Deal Home Page </h1>
 
 <!-- Replaced: <p>Tracking Managing and Closing Realestate Transactions</p>  -->
 
@@ -14,9 +17,8 @@
 <ul>
     <li><strong>Number of Contracts: </strong>{{  num_contracts }}</li> 
     <li><strong>Number of Contract Actions: </strong>{{num_actions}}</li>
-    <li><strong>Number of Unclosed Contracts: </strong>{{ num_unclosed_contracts}}</li>
     <li><strong>Number of Persons: </strong>{{ num_persons }}</li>
-    <li><strong>Number of Closed Contracts: </strong>{{ num_closed_contracts }}</li>
+ 
 </ul>
 
 <img src="{% static 'Flow.png' %}" alt="" width="500" height="300">

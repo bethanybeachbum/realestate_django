@@ -13,15 +13,14 @@
   <h2>New Contract Form</h2>
   <p>Add new contract:</p>
 
-  <form action="{% url 'realestate_app:new_contract' %}" method="'post" >
-    <!-- Prevents cross-site request forgery -->
+  <form action="{% url 'realestate_app:new_contract' %}" method='post' >
     {% csrf_token %}
     {{ form.as_p }}
     <button name="Submit">Add Contract</button>
   </form>
 
-  <a href="{% url 'realestate_app:new_contract' %}"> Add a new contract</a>
-
+  
+  <p>Back to <a href="/">Home</a></p>
   {% endblock content %}
 </body>
 

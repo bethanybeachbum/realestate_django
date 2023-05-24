@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
-from realestate_app.models import ContractAction, Contract, Person, Closing
+from realestate_app.models import ContractAction, Contract, Person, ContractDetail
 from django.http import HttpResponse
-from django.template import loader
 from .forms import ContractForm, ContractActionForm
 
 
@@ -15,19 +14,24 @@ def index(request):
     # Generate counts for some of the main objects
     num_contracts = Contract.objects.all().count()
     num_actions = ContractAction.objects.all().count()
-    num_unclosed_contracts = Contract.objects.filter(closedYesNo__exact="No").count()
     num_persons = Person.objects.all().count()
-    num_closed_contracts = Closing.objects.all().count()
+   
 
     context = {
         'num_contracts' : num_contracts,
         'num_actions' : num_actions,
-        'num_unclosed_contracts' : num_unclosed_contracts,
         'num_persons' : num_persons,
-        'num_closed_contracts' : num_closed_contracts,
     }
 
     return render(request, 'realestate_app/index.html', context = context )
+
+def contract(request, contract_id):
+    """ Show a single contract and all its ACTIONS   """
+    contract = Contract.objects.get(id=contract_id)
+    actions = contract.contractaction_set.order_by('action')
+    context = {'contract': contract, 'actions': actions}
+    return render(request, 'realestate_app/contract.html', context)
+
 
 def contracts(request):
     """Show all contracts that are not closed 
@@ -37,12 +41,18 @@ def contracts(request):
     context = {'contracts': contracts}
     return render(request, 'realestate_app/contracts.html', context)
 
-def contract(request, contract_id):
-    """Show details of one contract 
-    Case contract number is a specific one
-    """
-    context = {'contract': contract}
-    return render(request, 'realestate_app/contract/int:<id>.html' )
+
+def contractlist(request):
+    """List all contracts"""
+    contractlist = Contract.objects.order_by('AddDate')
+    context = {'contractlist': contractlist}
+    return render(request, 'realestate_app/contractlist.html', context)
+
+def contractdetail(request):
+    """ Detail about real estate contract """
+    contractdetail = ContractDetail.objects.order_by('mortgage')
+    context = {'contractdetail': contractdetail}
+    return render(request, 'realestate_app/contractdetail.html', context)
 
 def actions(request):
     """Show all actions"""
@@ -68,17 +78,6 @@ def person(request, person_id):
     context = {'person': person}
     return render(request, 'realestate_app/persons/int<id>.html' )
 
-def closings(request):
-    """Show closings """
-    action = Closing.objects.order_by('createDate')
-    context = {'closings': closings}
-    return render(request, 'realestate_app/closings.html' )
-
-def closing(request, closing_id):
-    """Show one closing """
-    action = Closing.objects.order_by('createDate')
-    context = {'closing': closing}
-    return render(request, 'realestate_app.closings/int<id>.html' )
 
 def new_contract(request):
     """Add a new contract"""
@@ -94,10 +93,12 @@ def new_contract(request):
 
     # Display a blank or invalid form.
     context = {'form': form}
-    return render(request, 'realestate_app/new_contractaction.html', context)    
+    return render(request, 'realestate_app/new_contract.html', context)    
+
 
 def new_action(request, contract_id):
-    contract_action = ContractAction.objects.get(id=contract_id)
+    """Add a new action for a particular contract"""
+    contract = Contract.objects.get(id=contract_id)
 
     if request.method != 'POST':
         # No data submitted, create a blank form.
@@ -106,18 +107,32 @@ def new_action(request, contract_id):
         # POST data submitted, process data.
         form = ContractActionForm(data=request.POST)
         if form.is_valid():
-            new_entry = form.save(commit=False)
-            new_entry.contract_action = contract_action
-            new_entry.save()
+            new_action = form.save(commit=False)
+            new_action.contract_action = contract
+            new_action.save()
             return redirect('realestate_app:contract', 
-            id = id)
-            # contract_id=contract_id)
+            contract_id=contract_id)
         
     # Display a blank or invalid form.
     context = {'contract': contract, 
                'form': form
                }
     return render( request, 'realestate_app/new_contractaction.html', context)
+
+""" 
+1. When the edit_action page receive a GET request, the edit_action() function
+returns a form for editing the entry.
+2. When the pages receives a POST request with revised action text, it saves the
+modified text into the database.  
+"""
+def edit_action(request, contractaction_id):
+    """ Edit an existing action . """
+    action = ContractAction.objects.get(id=contractaction_id)
+    contract = action.contract
+
+    # working in PAGE 418
+
+
 
 def about(request):
     

@@ -1,6 +1,6 @@
 {% extends "realestate_app/base.html" %}
 
-<!--   Closings.html  -->
+<!--   Contracts.html  -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,6 +10,21 @@
 <body>
   {% block content %}
   <h1> Future Contracts Page</h1>
+
+<p>Contracts</p>
+<ul>
+  {% for contract in contracts %}
+    <li>
+      <a href="{% url 'realestate_app:contract' contract.id %}"> {{ contract }} </a>
+    </li>
+    {% empty %}
+    <li> No contracts have been added yet.</li>
+    {% endfor %}
+</ul>
+
+
+  <a href="{% url 'realestate_app:new_contract' %}"> Add a new contract</a>
+  <p>Back to <a href="/">Home</a></p>
   {% endblock content %}
 </body>
 

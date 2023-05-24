@@ -2,10 +2,8 @@
 
 <!--   contractlist.html  -->
 
-<!DOCTYPE html>
-<html lang="en">
 <head>
-    {% block title %}<title>Title of Page</title>{% endblock %}
+    {% block title %}<title>Contract List</title>{% endblock %}
 </head>
 <body>
     <!-- Django Tags perform programming logic inside brackets.  -->
@@ -13,20 +11,21 @@
   <h1> List of Contracts</h1>
 
   <ul>
-    {% for x in mycontractlist %}
-      <li>{{ x.propertyAddress }} - Sold by:  {{ x.seller }} to {{x.buyer }}</li>
+    {% for each in contractlist %}
+      <li>{{ each.propertyAddress }} - Sold by:  {{ each.seller }} to {{each.buyer }}</li>
     {% endfor %}
   </ul>
 
 
 <!-- Next step -->
-
-
-  <h2>{{ mycontractlist.propertyaddress }} {{ mycontractlist.seller }}</h2>
+<ul>
+{% for each in contractlist %}
+  <h2>{{ each.propertyaddress }} {{ each.seller }}</h2>
   
-  <p>Contract Date: {{ mycontractlist.buyer}}</p>
-  
-  <p>Back to <a href="/index">Home</a></p>
+  <p>Contract Date: {{ each.buyer}}</p>
+  {% endfor %}
+</ul>
+  <p>Back to <a href="/">Home</a></p>
   
 
   {% endblock content %}
