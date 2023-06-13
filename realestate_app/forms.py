@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Contract, ContractAction, ContractDetail
+from .models import Contract, Action, ContractDetail
 
 class ContractForm(forms.ModelForm):
     class Meta:
@@ -28,9 +28,9 @@ class ContractDetailForm(forms.ModelForm):
                   ]
         labels = {'text': ''}        
         
-class ContractActionForm(forms.ModelForm):
+class ActionForm(forms.ModelForm):
     class Meta:
-        model = ContractAction
+        model = Action
         fields= [ 'action',
                   'actionPerson',
                   'actionCompany', 

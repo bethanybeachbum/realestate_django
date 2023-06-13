@@ -25,11 +25,20 @@ urlpatterns = [
     # /realestate_app
     path('', views.index, name='index'),
 
+    # PAGE THAT SHOWS ALL CONTRACTS
     # /realestate_app/contracts
     path('contracts/', views.contracts, name='contracts'),
 
+    # PAGE THAT SHOWS ALL ACTIONS FOR ONE CONTRACT
+    # /realestate_app/contract/<id>
+    path('contracts/<int:contract_id>/', views.contract, name='contract'),
+
      # /realestate_app/contractlist
     path('contractlist/', views.contractlist, name='contractlist'),
+
+
+    
+
 
     # /realestate_app/actions
     path('actions/', views.actions, name='actions'),
@@ -46,25 +55,28 @@ urlpatterns = [
     # /realestate_app/persons/<id>
     path('persons/<int:person_id>', views.person, name='person'),
 
+    ####################################
     # FORMS
+    ####################################
     # Page for adding new contract
     # this URL pattern sends requests to the view function new_contract()
     path('new_contract/', views.new_contract, name='new_contract' ),
-
-    # About page
-    path('about/', views.about, name='about'),
    
     # Page for adding new action
     path('new_action/<int:contract_id>/', views.new_action, name='new_action' ),
+
+    ####################################
+    # END OF FORMS
+    ####################################
 
   # /realestate_app/contractdetail
    #  path('contractdetail/', views.contractdetail, name='contractdetail'),
 
    
- # /realestate_app/contract/<id>
-    path('contracts/<int:contract_id>', views.contract, name='contract'),
-
   # PAGE FOR EDITING AN ACTION
-  path('edit_action/<int:contractaction_id/', views.edit_action, name='edit_action',)
+  path('edit_action/<int:action_id/', views.edit_action, name='edit_action'),
+
+  # About page
+    path('about/', views.about, name='about'),
  
 ]

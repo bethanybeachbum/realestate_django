@@ -1,13 +1,14 @@
 <!-- new_contractaction.html -->
+{% extends "realestate_app/base.html"   %}
 
 <head>
-    {% block title %}<title>New Contract Action Form</title>{% endblock %}
+    {% block title %}<title>New Action Form</title>{% endblock %}
 </head>
 <body>
     
   {% block content %}
-  <h2>New Contract Action Form</h2>
-  <p>Add new contract action:</p>
+  <h2>New Action Form</h2>
+  <p>Add new action:</p>
 
   <p><a href="{% url 'realestate_app:contract' contract.id %}">{{contract}} </a></p> 
 
@@ -16,7 +17,7 @@
     <!-- Prevents cross-site request forgery -->
     {% csrf_token %}
     {{ form.as_p }}
-    <button name="Submit">Add Contract Action</button>
+    <button name="Submit">Add Action</button>
   </form>
 
   <p>Back to <a href="/">Home</a></p>

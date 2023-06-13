@@ -6,12 +6,16 @@
 <html lang="en">
 <head>
     {% block title %}<title>Contracts</title>{% endblock %}
+
 </head>
 <body>
+  
   {% block content %}
+  <p>source: contracts.html</p>
+  <p></p>
   <h1> Future Contracts Page</h1>
 
-<p>Contracts</p>
+<p>Contracts: </p>
 <ul>
   {% for contract in contracts %}
     <li>

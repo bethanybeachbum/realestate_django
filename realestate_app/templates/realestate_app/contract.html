@@ -6,16 +6,26 @@
 
 <p>Contract:   {{  contract  }} </p>
 
+<P>Actions: </P>
+<p>
+    <a href="{% url 'realestate_app:new_action' contract.id %}"> Add a new action</a>
+</p>
 
-<P>Here is a list of all actions for this contract: </P>
-<p><a href="{% url 'realestate_app:new_action' contract.id %}"> Add a new contract action</a></p>
 <ul>
     {% for action in actions  %}
-        <li>{{ action }}</li>
+    <li>
+        <p> Action place holder</p>  
+        <p>{{action.actionPerson}}</p>  
+        <p>{{ action.Company }}</p>
+        <p></p>
+        <p>
+            <a href="{% url 'realestate_app:edit_action' action.id %}">Edit action</a>
+        </p>
+    </li>    
     {% empty %}
-        <li> No topics have been added yet.</li>
+        <li> No actions have been added yet.</li>
     {% endfor %}
-
+   
 </ul>
 
 

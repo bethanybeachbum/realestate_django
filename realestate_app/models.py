@@ -1,5 +1,4 @@
 from django.db import models
-from datetime import datetime
 from django.utils import timezone
 
 # Create your models here.
@@ -37,7 +36,7 @@ class ContractDetail(models.Model):
     updatedAt = models.DateField(auto_now=True, verbose_name="updated at")
     closeDate = models.DateField(null = True, help_text="Expected close date:")
     closingDocumentsPDF = models.FileField(upload_to='closingdocs/%Y/%m/%d', help_text = "Attach closing documents", blank=True, null=True)
-    closedContractComments = models.TextField(help_text="Final thoughts?")
+    closedContractComments = models.TextField(default = 'No Comment', help_text="Final thoughts?")
 
     class Meta:
         ordering = ["comments"]
@@ -49,18 +48,18 @@ class ContractDetail(models.Model):
         
 
 class Person(models.Model):
-    contracts = models.ManyToManyField(Contract)
-    first_name = models.CharField(max_length=30, help_text="First Name")
-    last_name = models.CharField(max_length=30,  help_text="Last Name")  
-    title = models.CharField(max_length=30, help_text="Title")
-    company = models.CharField(max_length=30,  help_text="Company")
-    email =  models.EmailField(max_length=254,  help_text="Email")
-    phone = models.CharField(max_length=30,  help_text="Phone")
-    street = models.CharField(max_length=30,  help_text="Street")
-    city = models.CharField(max_length=30,  help_text="City")
-    state = models.CharField(max_length=30,  help_text="State")
-    zip = models.CharField(max_length=10,  help_text="Zip Code")
-    role = models.CharField(max_length=10,  help_text="What is this person's role?")
+    contracts = models.ManyToManyField(Contract) #, on_delete=models.CASCADE, null=True)
+    first_name = models.CharField(max_length=30, default = None, blank=True,  null = True, help_text="First Name")
+    last_name = models.CharField(max_length=30,  default = None,  blank=True, null = True, help_text="Last Name")  
+    title = models.CharField(max_length=30,  default = None, blank=True, null = True, help_text="Title")
+    company = models.CharField(max_length=30, default = None,  blank=True,  null = True, help_text="Company")
+    email =  models.EmailField(max_length=254,  default = None, blank=True,  null = True, help_text="Email")
+    phone = models.CharField(max_length=30, default = None,  blank=True,  null = True, help_text="Phone")
+    street = models.CharField(max_length=30,  default = None, blank=True,  null = True, help_text="Street")
+    city = models.CharField(max_length=30,  default = None, blank=True,  null = True, help_text="City")
+    state = models.CharField(max_length=30,  default = None, blank=True,  null = True, help_text="State")
+    zip = models.CharField(max_length=10,  default = None, blank=True, null = True, help_text="Zip Code")
+    role = models.CharField(max_length=10, default = None,  blank=True, null = True, help_text="What is this person's role?")
 
     class Meta:
         ordering = ["last_name"]
@@ -71,7 +70,7 @@ class Person(models.Model):
         """Return a string representation of the model."""
         return f"{self.first_name} {self.last_name}"
 
-class ContractAction(models.Model):
+class Action(models.Model):
     ROLES = [
     ("Inspection", "Inspection"), 
     ("Survey", "Survey"),
@@ -87,16 +86,18 @@ class ContractAction(models.Model):
     ("Other_Action_2", "Other_Action_2"), 
     ("Other_Action_3", "Other_Action_3")
 ]
-    contract = models.ForeignKey(Contract, on_delete=models.CASCADE, null=True)
+    contract = models.ForeignKey(Contract, on_delete=models.CASCADE)
+    date_add = models.DateTimeField(auto_now_add=True, verbose_name="created at")
     action = models.CharField(max_length=30, help_text= "What is the specific action to be accomplished?", choices = ROLES)
     actionPerson = models.CharField(max_length=30, help_text="Person assigned")
     actionCompany = models.CharField(max_length=30, help_text="Person's company")
     actionNextStep = models.CharField(max_length=30)
     actionFee = models.CharField(max_length=30, help_text="Fee")
     actionDueDate = models.DateField(null=True, default='', help_text="Date due")
-    AddDate = models.DateTimeField(auto_now_add=True, null=True, verbose_name="created at")
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="updated at")
 
+    class Meta:
+        verbose_name_plural = 'actions'
 
     def __str__(self):
         """Return a string representation of the model."""
