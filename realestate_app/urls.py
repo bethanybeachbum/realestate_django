@@ -74,7 +74,7 @@ urlpatterns = [
 
    
   # PAGE FOR EDITING AN ACTION
-  path('edit_action/<int:action_id/', views.edit_action, name='edit_action'),
+  path('edit_action/<int:action_id>/', views.edit_action, name='edit_action'),
 
   # About page
     path('about/', views.about, name='about'),

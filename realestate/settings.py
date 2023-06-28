@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     # My apps
     'realestate_app',
+    'users',
     # Corey Shafer says add:
     # realestate_app.apps.RealestateAppConfig
 

@@ -134,8 +134,8 @@ def edit_action(request, action_id):
             form.save()
             return redirect('realestate_app:contract', action_id=action.id)
         
-        context = {'action':action, 'contract':contract, 'form':form}
-        return render(request, 'realestate_app/edit_action.html', context)
+    context = {'action':action, 'contract':contract, 'form':form}
+    return render(request, 'realestate_app/edit_action.html', context)
 
 
 def about(request):
