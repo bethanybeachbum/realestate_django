@@ -1,0 +1,13 @@
+{% extends "realestate_app/base.html" %}
+
+{% block content %}
+
+    <form method="post" action="{% url 'users:register'  %}">
+        {% csrf_token   %}
+        {{ forms.as_p   }}
+
+        <button name="submit">Register</button>
+        <input type="hidden" name="next" value="{% url 'realestate_app:index' %}" />
+    </form>
+
+{% endblock content   %}    
